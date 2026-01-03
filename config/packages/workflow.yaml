@@ -1,0 +1,28 @@
+framework:
+    workflows:
+        purchase_request_flow:
+            type: "state_machine"
+            audit_trail:
+                enabled: true
+            marking_store:
+                type: "method"
+                property: "status"
+            supports:
+                - App\Entity\PurchaseRequest
+            initial_marking: draft
+            places:
+                - draft
+                - pending
+                - submitted
+                - approved
+                - rejected
+            transitions:
+                submit:
+                    from: [draft, rejected]   # plusieurs statuts possibles
+                    to: submitted
+                approve:
+                    from: submitted
+                    to: approved
+                reject:
+                    from: submitted
+                    to: rejected

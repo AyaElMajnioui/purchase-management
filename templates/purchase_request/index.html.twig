@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Purchase Request Tracking{% endblock %}
+
+{% block body %}
+    <div class="card card-outline card-info shadow">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-shopping-cart mr-2"></i>Purchase Requests List
+            </h3>
+            <div class="card-tools">
+                <a href="{{ path('app_purchase_request_new') }}" class="btn btn-info btn-sm">
+                    <i class="fas fa-plus-circle"></i> Create Request
+                </a>
+            </div>
+        </div>
+
+        <div class="card-body p-0">
+            <table class="table table-striped table-hover m-0">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Ref.</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                        <th>Justification</th>
+                        <th>Attachment</th>
+                        <th>Created At</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for purchase_request in purchase_requests %}
+                    <tr>
+                        <td class="font-weight-bold text-primary">
+                            {{ purchase_request.reference|default('#' ~ purchase_request.id) }}
+                        </td>
+                        <td>
+                            <span class="badge badge-light border">{{ purchase_request.quantity }} unit(s)</span>
+                        </td>
+                        <td>
+                             <span class="badge badge-secondary p-2 uppercase">{{ purchase_request.status|upper }}</span>
+                        </td>
+                        <td class="text-truncate" style="max-width: 150px;" title="{{ purchase_request.justification }}">
+                            {{ purchase_request.justification|default('---') }}
+                        </td>
+                        <td>
+                            {% if purchase_request.attachment %}
+                                <a href="{{ asset('uploads/pdf/' ~ purchase_request.attachment) }}" target="_blank" class="btn btn-xs btn-outline-danger">
+                                    <i class="fas fa-file-pdf"></i> View PDF
+                                </a>
+                            {% else %}
+                                <span class="text-muted small italic">No file</span>
+                            {% endif %}
+                        </td>
+                        <td class="small">
+                            {{ purchase_request.createdAt ? purchase_request.createdAt|date('d/m/Y H:i') : '-' }}
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group">
+                                <a href="{{ path('app_purchase_request_show', {'id': purchase_request.id}) }}" class="btn btn-default btn-sm" title="Details">
+                                    <i class="fas fa-eye text-info"></i>
+                                </a>
+                                <a href="{{ path('app_purchase_request_edit', {'id': purchase_request.id}) }}" class="btn btn-default btn-sm" title="Edit">
+                                    <i class="fas fa-edit text-warning"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center py-5 text-muted">
+                            <i class="fas fa-inbox fa-3x mb-3"></i><br>
+                            No purchase requests found.
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer clearfix">
+			<span class="text-muted">Total requests:
+				{{ purchase_requests|length }}
+				</span>
+		</div>
+        <div>
+        {{ knp_pagination_render(purchase_requests) }}
+        </div>
+    </div>
+{% endblock %}

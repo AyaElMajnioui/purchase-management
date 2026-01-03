@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Purchase Orders
+{% endblock %}
+
+{% block body %}
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-12">
+				<div class="card shadow-sm">
+					<div class="card-header bg-white py-3">
+						<h3 class="card-title font-weight-bold text-primary">
+							<i class="fas fa-file-invoice-dollar mr-2"></i>Purchase Order Management
+						</h3>
+					</div>
+
+					<div class="card-body table-responsive p-0">
+						<table class="table table-hover text-nowrap mb-0">
+							<thead class="bg-light">
+								<tr>
+									<th class="border-top-0"># Number</th>
+									<th class="border-top-0">Request Ref.</th>
+									<th class="border-top-0">Total (Excl. Tax)</th>
+									<th class="border-top-0 text-center">Request Status</th>
+									<th class="border-top-0">Creation Date</th>
+									<th class="border-top-0 text-right">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for po in purchase_orders %}
+									<tr>
+										<td class="font-weight-bold text-dark">{{ po.orderNumber }}</td>
+										<td>
+											<span class="text-muted">
+												<i class="fas fa-link mr-1 small"></i>
+												{{ po.purchaseRequest.reference }}</span>
+										</td>
+										<td class="font-weight-bold text-primary">
+											{{ po.totalAmount|number_format(2, ',', ' ') }}
+											€
+										</td>
+										<td class="text-center">
+											{% set status = po.purchaseRequest.status %}
+											{% if status == 'En attente' %}
+												<span class="badge badge-warning px-3 py-2">
+													<i class="fas fa-clock mr-1"></i>
+													Pending
+												</span>
+											{% elseif status == 'Validée' %}
+												<span class="badge badge-success px-3 py-2">
+													<i class="fas fa-check-circle mr-1"></i>
+													Approved
+												</span>
+											{% else %}
+												<span class="badge badge-danger px-3 py-2">
+													<i class="fas fa-times-circle mr-1"></i>
+													{{ status }}
+												</span>
+											{% endif %}
+										</td>
+										<td>{{ po.createdAt|date('d/m/Y') }}</td>
+										<td class="text-right">
+											<a href="{{ path('app_purchase_order_show', {id: po.id}) }}" class="btn btn-sm btn-outline-primary" title="Details">
+												<i class="fas fa-eye"></i>
+												View
+											</a>
+										</td>
+									</tr>
+								{% else %}
+									<tr>
+										<td colspan="6" class="text-center py-5">
+											<img src="{{ asset('assets/img/empty-box.png') }}" alt="Empty" style="width: 50px;" class="mb-3 d-block mx-auto">
+											<p class="text-muted">No purchase orders found.</p>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+
+					<div class="card-footer bg-white">
+						<small class="text-muted">Total:
+							{{ purchase_orders|length }}
+							purchase order(s)
+						</small>
+						<div>
+							{{ knp_pagination_render(purchase_orders) }}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

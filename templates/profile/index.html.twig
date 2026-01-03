@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card card-widget widget-user shadow">
+                <div class="widget-user-header bg-primary">
+                    <h3 class="widget-user-username">
+                        {{ app.user.firstname|capitalize }} {{ app.user.lastname|upper }}
+                    </h3>
+                    <br>
+                    <h5 class="widget-user-desc">
+                        {% if 'ROLE_ADMIN' in app.user.roles %}
+                            Administrator
+                        {% else %}
+                            Standard User
+                        {% endif %}
+                    </h5>
+                </div>
+                <div class="widget-user-image">
+                    {# <img class="img-circle elevation-2" src="{{ asset('assets/adminlte/dist/img/user2-160x160.jpg') }}" alt="User Avatar"> #}
+                </div>
+                <div class="card-footer bg-white">
+                    <div class="row">
+                        <div class="col-sm-12 border-right">
+                            <div class="description-block">
+                                <h5 class="description-header">
+                                    <i class="fas fa-envelope mr-2"></i>Email
+                                </h5>
+                                <span class="description-text">{{ app.user.email }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="text-center pb-3">
+                        <a href="{{ path('app_dashboard') }}" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </a>
+                        {# Optional: edit button #}
+                        <a href="#" class="btn btn-primary btn-sm ml-2">
+                            <i class="fas fa-edit"></i> Edit my information
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

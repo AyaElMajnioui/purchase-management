@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-3 col-6">
+				<div class="small-box bg-info">
+					<div class="inner">
+						<h3>{{ stats.totalRequests }}</h3>
+						<p>Total Requests</p>
+					</div>
+					<div class="icon">
+						<i class="fas fa-file-invoice"></i>
+					</div>
+					<a href="{{ path('app_purchase_request_index') }}" class="small-box-footer">
+						View list
+						<i class="fas fa-arrow-circle-right"></i>
+					</a>
+				</div>
+			</div>
+
+			<div class="col-lg-3 col-6">
+				<div class="small-box bg-warning">
+					<div class="inner">
+						<h3>{{ stats.pendingRequests }}</h3>
+						<p>Pending</p>
+					</div>
+					<div class="icon">
+						<i class="fas fa-clock"></i>
+					</div>
+					<a href="{{ path('app_purchase_request_index') }}" class="small-box-footer">
+						View list
+						<i class="fas fa-arrow-circle-right"></i>
+					</a>
+				</div>
+			</div>
+
+			<div class="col-lg-3 col-6">
+				<div class="small-box bg-primary">
+					<div class="inner">
+						<h3>{{ poCount }}</h3>
+						<p>Purchase Orders</p>
+					</div>
+					<div class="icon">
+						<i class="fas fa-receipt"></i>
+					</div>
+					<a href="{{ path('app_purchase_order_index') }}" class="small-box-footer">
+						View list
+						<i class="fas fa-arrow-circle-right"></i>
+					</a>
+				</div>
+			</div>
+
+			{% if is_granted('ROLE_ADMIN') %}
+				<div class="col-lg-3 col-6">
+					<div class="small-box bg-success">
+						<div class="inner">
+							<h3>{{ stats.totalProducts }}</h3>
+							<p>Products in Catalog</p>
+						</div>
+						<div class="icon">
+							<i class="fas fa-box"></i>
+						</div>
+						<a href="{{ path('app_product_index') }}" class="small-box-footer">
+							View list
+							<i class="fas fa-arrow-circle-right"></i>
+						</a>
+					</div>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+{% endblock %}

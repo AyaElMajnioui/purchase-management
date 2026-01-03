@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add Product{% endblock %}
+
+{% block body %}
+	<div class="card card-primary">
+		<div class="card-header">
+			<h3 class="card-title">
+				<i class="fas fa-plus-circle mr-2"></i>
+				New Product
+			</h3>
+		</div>
+		<div class="card-body">
+			{{ include('product/_form.html.twig') }}
+		</div>
+		<div class="card-footer bg-white">
+			<a href="{{ path('app_product_index') }}" class="btn btn-outline-secondary btn-sm">
+				<i class="fas fa-arrow-left mr-1"></i>
+				Back to list
+			</a>
+		</div>
+	</div>
+{% endblock %}

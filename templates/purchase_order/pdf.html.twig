@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Purchase Order - {{ po.orderNumber }}</title>
+    <style>
+        body { font-family: 'Helvetica', 'Arial', sans-serif; color: #333; line-height: 1.6; padding: 20px; }
+
+        /* Header */
+        .header { margin-bottom: 40px; border-bottom: 2px solid #0044cc; padding-bottom: 10px; }
+        .header table { width: 100%; border: none; }
+        .header td { border: none; vertical-align: top; }
+        .company-name { color: #0044cc; font-size: 24px; font-weight: bold; text-transform: uppercase; }
+        .doc-title { text-align: right; font-size: 20px; color: #555; }
+
+        /* Client / Order Info */
+        .info-section { margin-bottom: 30px; width: 100%; }
+        .info-section td { border: none; width: 50%; }
+        .info-box { padding: 10px; border: 1px solid #eee; background: #f9f9f9; min-height: 100px; }
+        .info-label { font-weight: bold; color: #0044cc; display: block; margin-bottom: 5px; border-bottom: 1px solid #ccc; }
+
+        /* Products Table */
+        table.items-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        table.items-table th { background: #0044cc; color: #ffffff; padding: 12px; text-align: left; text-transform: uppercase; font-size: 11px; }
+        table.items-table td { padding: 10px; border-bottom: 1px solid #eee; }
+
+        /* Totals */
+        .total-section { margin-top: 20px; text-align: right; }
+        .total-box { display: inline-block; width: 250px; background: #f0f0f0; padding: 10px; }
+        .total-row { font-size: 14px; font-weight: bold; color: #0044cc; }
+
+        /* Footer */
+        .footer { position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 10px; color: #999; border-top: 1px solid #eee; padding-top: 10px; }
+        .signature-space { margin-top: 50px; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <table>
+        <tr>
+            <td class="company-name">ProcurementApp</td>
+            <td class="doc-title">PURCHASE ORDER</td>
+        </tr>
+    </table>
+</div>
+
+<table class="info-section">
+    <tr>
+        <td>
+            <div class="info-box">
+                <span class="info-label">Issuer</span>
+                <strong>Purchasing Department</strong><br>
+                Date: {{ po.createdAt|date('d/m/Y') }}<br>
+                Ref: {{ po.orderNumber }}
+            </div>
+        </td>
+        <td>
+            <div class="info-box" style="margin-left: 10px;">
+                <span class="info-label">Requester</span>
+                <strong>{{ po.purchaseRequest.requester.firstname }} {{ po.purchaseRequest.requester.lastname }}</strong><br>
+                Email: {{ po.purchaseRequest.requester.email }}<br>
+                Request Ref: {{ po.purchaseRequest.reference }}
+            </div>
+        </td>
+    </tr>
+</table>
+
+<table class="items-table">
+    <thead>
+        <tr>
+            <th>Product Description</th>
+            <th style="text-align: center;">Unit Price</th>
+            <th style="text-align: center;">Quantity</th>
+            <th style="text-align: right;">Total (Excl. Tax)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ po.purchaseRequest.product.name }}</td>
+            <td style="text-align: center;">{{ po.purchaseRequest.product.price|number_format(2, ',', ' ') }} €</td>
+            <td style="text-align: center;">{{ po.purchaseRequest.quantity }}</td>
+            <td style="text-align: right; font-weight: bold;">{{ po.totalAmount|number_format(2, ',', ' ') }} €</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="total-section">
+    <div class="total-box">
+        <div class="total-row">
+            NET AMOUNT DUE: {{ po.totalAmount|number_format(2, ',', ' ') }} €
+        </div>
+    </div>
+</div>
+
+<p><strong>Order Status:</strong> {{ po.purchaseRequest.status|upper }}</p>
+
+<table style="width: 100%; margin-top: 60px; border: none;">
+    <tr>
+        <td style="border: none; text-align: left; width: 50%;">
+            <p style="text-decoration: underline;">Supplier Stamp:</p>
+        </td>
+        <td style="border: none; text-align: right; width: 50%;">
+            <p style="text-decoration: underline;">Authorized Signature:</p>
+        </td>
+    </tr>
+</table>
+
+<div class="footer">
+    ProcurementApp - Purchase Management Software - Generated on {{ "now"|date('d/m/Y H:i') }}
+</div>
+
+</body>
+</html>

@@ -1,0 +1,231 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Purchase Request Details
+{% endblock %}
+
+{% block body %}
+	<div class="container-fluid">
+		<div
+			class="row">
+
+			{# =======================
+												               MAIN CONTENT (8 cols)
+												            ======================== #}
+			<div
+				class="col-md-8">
+
+				{# ===== PURCHASE REQUEST CARD ===== #}
+				<div
+					class="card card-outline card-info shadow-sm">
+
+					{# Header #}
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h3 class="card-title mb-0">
+							<i class="fas fa-file-alt mr-2 text-info"></i>
+							Request:
+							<strong>{{ purchase_request.reference|default('#' ~ purchase_request.id) }}</strong>
+						</h3>
+
+						<div class="card-tools">
+							{% if purchase_request.status == 'created' %}
+								<span class="badge badge-warning p-2 text-dark">Pending</span>
+							{% elseif purchase_request.status == 'approved' %}
+								<span class="badge badge-success p-2">Approved</span>
+							{% elseif purchase_request.status == 'rejected' %}
+								<span class="badge badge-danger p-2">Rejected</span>
+							{% else %}
+								<span class="badge badge-secondary p-2">Unknown</span>
+							{% endif %}
+						</div>
+					</div>
+
+					{# Body #}
+					<div
+						class="card-body">
+
+						{# General information #}
+						<div class="row mb-4">
+							<div class="col-sm-6">
+								<h6 class="text-muted font-weight-bold">General Information</h6>
+
+								<p class="mb-1">
+									<strong>Date:</strong>
+									{{ purchase_request.createdAt|date('d/m/Y H:i') }}
+								</p>
+
+								<p class="mb-1">
+									<strong>Quantity:</strong>
+									<span class="badge badge-secondary px-2">
+										{{ purchase_request.quantity }}
+										unit(s)
+									</span>
+								</p>
+
+								<p class="mb-1">
+									<strong>Requester:</strong>
+									{{ purchase_request.requester.email }}
+								</p>
+							</div>
+
+							<div class="col-sm-6 border-left">
+								<h6 class="text-muted font-weight-bold">Attachment</h6>
+
+								{% if purchase_request.attachment %}
+									<a href="{{ asset('uploads/pdf/' ~ purchase_request.attachment) }}" target="_blank" class="btn btn-outline-danger mt-1">
+										<i class="fas fa-file-pdf mr-2"></i>
+										View Attachment
+									</a>
+								{% else %}
+									<p class="text-muted small">No attachment provided</p>
+								{% endif %}
+							</div>
+						</div>
+
+						{# Justification #}
+						<div class="callout callout-info">
+							<h5>
+								<i class="fas fa-comment-dots mr-2"></i>
+								Justification
+							</h5>
+							<p>{{ purchase_request.justification|default('No justification provided.') }}</p>
+						</div>
+
+						{# Workflow actions #}
+						<div class="mt-4 p-3 bg-light border rounded">
+							<h6 class="font-weight-bold mb-3">
+								<i class="fas fa-cogs mr-2"></i>
+								Actions
+							</h6>
+
+							<div class="d-flex flex-wrap">
+								{% if workflow_can(purchase_request, 'submit') %}
+									<form method="post" action="{{ path('app_purchase_request_submit', {'id': purchase_request.id}) }}" class="mr-2 mb-2">
+										<button class="btn btn-primary">
+											<i class="fas fa-paper-plane mr-1"></i>
+											Submit
+										</button>
+									</form>
+								{% endif %}
+
+								{% if workflow_can(purchase_request, 'approve') %}
+									<form method="post" action="{{ path('app_purchase_request_approve', {'id': purchase_request.id}) }}" class="mr-2 mb-2">
+										<button class="btn btn-success">
+											<i class="fas fa-check mr-1"></i>
+											Approve
+										</button>
+									</form>
+								{% endif %}
+
+								{% if workflow_can(purchase_request, 'reject') %}
+									<form method="post" action="{{ path('app_purchase_request_reject', {'id': purchase_request.id}) }}" class="mr-2 mb-2">
+										<button class="btn btn-danger">
+											<i class="fas fa-times mr-1"></i>
+											Reject
+										</button>
+									</form>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+
+					{# Footer #}
+					<div class="card-footer bg-white d-flex justify-content-between">
+						<a href="{{ path('app_purchase_request_index') }}" class="btn btn-outline-secondary btn-sm">
+							<i class="fas fa-arrow-left mr-1"></i>
+							Back to list
+						</a>
+
+						<div class="btn-group">
+							{% if purchase_request.status == constant('App\\Entity\\PurchaseRequest::STATUS_DRAFT') %}
+								<a href="{{ path('app_purchase_request_edit', {'id': purchase_request.id}) }}" class="btn btn-warning btn-sm">
+									<i class="fas fa-edit mr-1"></i>
+									Edit
+								</a>
+							{% endif %}
+							{{ include('purchase_request/_delete_form.html.twig', {purchase_request: purchase_request}) }}
+						</div>
+					</div>
+				</div>
+
+				{# ===== COMMENTS SECTION ===== #}
+				<div class="card card-outline card-secondary shadow-sm mt-4">
+					<div class="card-header">
+						<h3 class="card-title">
+							<i class="fas fa-comments mr-2"></i>
+							Comments
+						</h3>
+					</div>
+
+					<div class="card-body">
+						{% for comment in purchase_request.comments %}
+							<div class="media mb-4 pb-3 border-bottom">
+								<span class="badge badge-info rounded-circle p-3 mr-3">
+									<i class="fas fa-user"></i>
+								</span>
+
+								<div class="media-body">
+									<h6 class="mb-1 font-weight-bold">
+										{{ comment.user.email }}
+										<small class="text-muted ml-2">
+											{{ comment.createdAt|date('d/m/Y H:i') }}
+										</small>
+									</h6>
+									<p class="mb-0 text-muted">{{ comment.content }}</p>
+								</div>
+							</div>
+						{% else %}
+							<p class="text-muted text-center">No comments yet.</p>
+						{% endfor %}
+
+						{% if comment_form is defined %}
+							<hr>
+
+							{{ form_start(comment_form) }}
+							{{ form_widget(comment_form.content, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'placeholder': 'Write your comment...',
+                                    'rows': 4
+                                }
+                            }) }}
+							<div class="mt-3 text-right">
+								<button class="btn btn-primary btn-sm">
+									<i class="fas fa-paper-plane mr-1"></i>
+									Post Comment
+								</button>
+							</div>
+
+							{{ form_end(comment_form, {'render_rest': false}) }}
+						{% endif %}
+
+					</div>
+				</div>
+
+			</div>
+
+			{# =======================
+												               SIDEBAR (4 cols)
+												            ======================== #}
+			<div class="col-md-4">
+				<div class="info-box bg-light border shadow-sm">
+					<span class="info-box-icon bg-info">
+						<i class="fas fa-box"></i>
+					</span>
+
+					<div class="info-box-content">
+						<span class="info-box-text text-muted">Related Product</span>
+						<span class="info-box-number text-lg">
+							{{ purchase_request.product.name|default('Product deleted') }}
+						</span>
+						<span class="text-sm">
+							Unit Price:
+							{{ purchase_request.product.price|default(0) }}
+							€
+						</span>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+{% endblock %}

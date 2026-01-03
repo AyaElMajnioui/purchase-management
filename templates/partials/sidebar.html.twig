@@ -1,0 +1,96 @@
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+	<a href="{{ path('app_dashboard') }}" class="brand-link">
+		<span class="brand-text font-weight-light">ProcurementApp</span>
+	</a>
+
+	<div class="sidebar">
+		<nav class="mt-2">
+			<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview">
+
+				<li class="nav-item">
+					<a href="{{ path('app_dashboard') }}" class="nav-link">
+						<i class="nav-icon fas fa-tachometer-alt"></i>
+						<p>Dashboard</p>
+					</a>
+				</li>
+				{# MENU RESERVÉ À L'ADMIN #}
+				{% if is_granted('ROLE_ADMIN') %}
+					<li class="nav-item">
+						<a href="{{ path('app_supplier_index') }}" class="nav-link">
+							<i class="nav-icon fas fa-truck"></i>
+							<p>
+								Suppliers
+								<i class="right fas fa-angle-left"></i>
+							</p>
+						</a>
+						<ul class="nav nav-treeview">
+							<li class="nav-item">
+								<a href="{{ path('app_supplier_index') }}" class="nav-link">
+									<i class="far fa-circle nav-icon"></i>
+									<p>List</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="{{ path('app_supplier_new') }}" class="nav-link">
+									<i class="far fa-circle nav-icon"></i>
+									<p>Add</p>
+								</a>
+							</li>
+						</ul>
+					</li>
+					<li class="nav-item">
+						<a href="{{ path('app_product_index') }}" class="nav-link">
+							<i class="nav-icon fas fa-boxes"></i>
+							<p>
+								Products
+								<i class="right fas fa-angle-left"></i>
+							</p>
+						</a>
+						<ul class="nav nav-treeview">
+							<li class="nav-item">
+								<a href="{{ path('app_product_index') }}" class="nav-link">
+									<i class="far fa-circle nav-icon"></i>
+									<p>List</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="{{ path('app_product_new') }}" class="nav-link">
+									<i class="far fa-circle nav-icon"></i>
+									<p>Add</p>
+								</a>
+							</li>
+						</ul>
+					</li>
+				{% endif %}
+				{# MENU ACCESSIBLE PAR TOUS (USER ET ADMIN) #}
+				<li class="nav-header">PURCHASES</li>
+				<li class="nav-item">
+					<a href="{{ path('app_purchase_request_index') }}" class="nav-link">
+						<i class="nav-icon fas fa-shopping-cart"></i>
+						<p>My Requests</p>
+					</a>
+				</li>
+				{% if is_granted('ROLE_ADMIN') %}
+					<li class="nav-item">
+						<a href="{{ path('app_purchase_request_all') }}" class="nav-link">
+							<i class="nav-icon fas fa-clipboard-check"></i>
+							<p>All Requests
+								<span class="badge badge-warning right">New</span>
+							</p>
+						</a>
+					</li>
+				{% endif %}
+				{% if is_granted('ROLE_ADMIN') %}
+					<li class="nav-item">
+						<a href="{{ path('app_purchase_order_index') }}" class="nav-link">
+							<i class="nav-icon fas fa-file-invoice"></i>
+							<p>
+								Purchase Orders
+							</p>
+						</a>
+					</li>
+				{% endif %}
+			</ul>
+		</nav>
+	</div>
+</aside>

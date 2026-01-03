@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product Management{% endblock %}
+
+{% block body %}
+	<div class="card card-outline card-primary shadow">
+		<div class="card-header">
+			<h3 class="card-title">
+				<i class="fas fa-boxes mr-2"></i>Product List
+			</h3>
+
+			<div class="card-tools">
+				<div class="d-flex align-items-center">
+
+					<form method="get" class="form-inline mr-2">
+						<div class="input-group input-group-sm">
+							<div class="input-group-prepend">
+								<span class="input-group-text bg-light border-right-0">
+									<i class="fas fa-filter text-muted"></i>
+								</span>
+							</div>
+							<select name="supplier" class="form-control form-control-sm border-left-0"
+							        onchange="this.form.submit()" style="min-width: 180px;">
+								<option value="">All suppliers</option>
+								{% for supplier in suppliers %}
+									<option value="{{ supplier.id }}"
+										{% if app.request.get('supplier') == supplier.id %} selected {% endif %}>
+										{{ supplier.name }}
+									</option>
+								{% endfor %}
+							</select>
+						</div>
+					</form>
+
+					<a href="{{ path('app_product_new') }}" class="btn btn-primary btn-sm">
+						<i class="fas fa-plus-circle mr-1"></i>
+						New
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="card-body p-0">
+			<table class="table table-striped table-hover m-0">
+				<thead class="thead-light">
+					<tr>
+						<th style="width: 25%">Name</th>
+						<th style="width: 15%">Price</th>
+						<th style="width: 30%">Description</th>
+						<th style="width: 15%">Supplier</th>
+						<th style="width: 15%" class="text-center">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for product in products %}
+						<tr>
+							<td class="font-weight-bold">{{ product.name }}</td>
+							<td>
+								<span class="badge badge-info px-2 py-2">
+									{{ product.price|number_format(2, ',', ' ') }} €
+								</span>
+							</td>
+							<td class="text-muted small">
+								{{ product.description|default('No description') }}
+							</td>
+							<td>
+								<span class="badge badge-secondary">
+									<i class="fas fa-truck mr-1"></i>
+									{{ product.supplier.name }}
+								</span>
+							</td>
+							<td class="text-center">
+								<div class="btn-group">
+									<a href="{{ path('app_product_show', {id: product.id}) }}"
+									   class="btn btn-default btn-sm" title="Details">
+										<i class="fas fa-eye text-info"></i>
+									</a>
+									<a href="{{ path('app_product_edit', {id: product.id}) }}"
+									   class="btn btn-default btn-sm" title="Edit">
+										<i class="fas fa-edit text-warning"></i>
+									</a>
+								</div>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="5" class="text-center py-5 text-muted">
+								<i class="fas fa-folder-open fa-2x mb-2"></i><br>
+								No products found.
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+
+		<div class="card-footer clearfix bg-white">
+			<div class="float-left clearfix">
+				<span class="text-muted">
+					Total: {{ products|length }} product(s)
+				</span>
+			</div>
+			<div class="float-right">
+				{{ knp_pagination_render(products) }}
+			</div>
+		</div>
+	</div>
+{% endblock %}

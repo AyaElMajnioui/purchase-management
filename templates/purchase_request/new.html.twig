@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Purchase Request{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-9 mx-auto">
+            <div class="card card-outline card-info shadow-sm">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-cart-plus mr-2 text-info"></i>
+                        Create a new purchase request
+                    </h3>
+                </div>
+
+                <div class="card-body">
+                    <p class="text-muted mb-4">
+                        Please fill in the information below. Make sure to attach a supporting <strong>PDF</strong> document if necessary.
+                    </p>
+
+                    {{ include('purchase_request/_form.html.twig') }}
+                </div>
+
+                <div class="card-footer bg-white">
+                    <a href="{{ path('app_purchase_request_index') }}" class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-arrow-left mr-1"></i> Back to requests list
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {# Help Sidebar #}
+        <div class="col-md-3">
+            <div class="card card-info">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-question-circle mr-2"></i> Help</h3>
+                </div>
+                <div class="card-body small">
+                    <ul class="pl-3">
+                        <li><strong>Quantity:</strong> Specify the number of units needed.</li>
+                        <li><strong>Justification:</strong> Briefly explain the need.</li>
+                        <li><strong>File:</strong> Only PDF files (max 2MB) are accepted.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

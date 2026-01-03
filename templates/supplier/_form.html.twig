@@ -1,0 +1,53 @@
+{# templates/supplier/_form.html.twig #}
+
+{{ form_start(form) }}
+    <div class="row">
+        {# Supplier Name #}
+        <div class="col-md-6">
+            <div class="form-group">
+                {{ form_row(form.name, {
+                    'label': 'Supplier / Company Name',
+                    'attr': {'class': 'form-control', 'placeholder': 'Ex: Global Tech Inc.'}
+                }) }}
+            </div>
+        </div>
+
+        {# Email #}
+        <div class="col-md-6">
+            <div class="form-group">
+                {{ form_row(form.email, {
+                    'label': 'Email Address',
+                    'attr': {'class': 'form-control', 'placeholder': 'example@supplier.com'}
+                }) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        {# Phone #}
+        <div class="col-md-4">
+            <div class="form-group">
+                {{ form_row(form.phone, {
+                    'label': 'Phone',
+                    'attr': {'class': 'form-control', 'placeholder': 'Enter phone number...'}
+                }) }}
+            </div>
+        </div>
+
+        {# Address #}
+        <div class="col-md-8">
+            <div class="form-group">
+                {{ form_row(form.address, {
+                    'label': 'Full Address',
+                    'attr': {'class': 'form-control', 'rows': 1, 'placeholder': 'Street, City, Postal Code...'}
+                }) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <button class="btn btn-success shadow-sm">
+            <i class="fas fa-save mr-1"></i> {{ button_label|default('Save Supplier') }}
+        </button>
+    </div>
+{{ form_end(form) }}

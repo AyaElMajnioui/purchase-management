@@ -1,5 +1,8 @@
 twig:
-    file_name_pattern: '*.twig'
+    file_name_pattern: "*.twig"
+    default_path: "%kernel.project_dir%/templates"
+    # Ajoutez cette ligne pour styliser tous les formulaires automatiquement
+    form_themes: ["bootstrap_4_layout.html.twig"]
 
 when@test:
     twig:
