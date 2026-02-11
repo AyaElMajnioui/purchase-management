@@ -16,8 +16,8 @@ class PurchaseOrder
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $orderNumber = null;
 
-    #[ORM\OneToOne(inversedBy: 'purchaseOrder')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OneToOne(targetEntity: PurchaseRequest::class,inversedBy: 'purchaseOrder')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?PurchaseRequest $purchaseRequest = null;
 
     #[ORM\Column]

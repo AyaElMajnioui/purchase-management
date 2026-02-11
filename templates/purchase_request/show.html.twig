@@ -9,8 +9,8 @@
 			class="row">
 
 			{# =======================
-												               MAIN CONTENT (8 cols)
-												            ======================== #}
+																		               MAIN CONTENT (8 cols)
+																		            ======================== #}
 			<div
 				class="col-md-8">
 
@@ -27,15 +27,22 @@
 						</h3>
 
 						<div class="card-tools">
-							{% if purchase_request.status == 'created' %}
+							{% if purchase_request.status == 'draft' %}
+								<span class="badge badge-secondary p-2">Draft</span>
+
+							{% elseif purchase_request.status == 'pending' %}
 								<span class="badge badge-warning p-2 text-dark">Pending</span>
+
 							{% elseif purchase_request.status == 'approved' %}
 								<span class="badge badge-success p-2">Approved</span>
+
 							{% elseif purchase_request.status == 'rejected' %}
 								<span class="badge badge-danger p-2">Rejected</span>
+
 							{% else %}
-								<span class="badge badge-secondary p-2">Unknown</span>
+								<span class="badge badge-dark p-2">Unknown</span>
 							{% endif %}
+
 						</div>
 					</div>
 
@@ -204,8 +211,8 @@
 			</div>
 
 			{# =======================
-												               SIDEBAR (4 cols)
-												            ======================== #}
+																		               SIDEBAR (4 cols)
+																		            ======================== #}
 			<div class="col-md-4">
 				<div class="info-box bg-light border shadow-sm">
 					<span class="info-box-icon bg-info">

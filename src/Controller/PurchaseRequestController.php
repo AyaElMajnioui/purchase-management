@@ -134,13 +134,22 @@ final class PurchaseRequestController extends AbstractController
     #[Route('/{id}/edit', name: 'app_purchase_request_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, PurchaseRequest $purchaseRequest, EntityManagerInterface $entityManager): Response
     {
+        $oldAttachment = $purchaseRequest->getAttachment();
         $form = $this->createForm(PurchaseRequestType::class, $purchaseRequest);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if (!$purchaseRequest->getAttachment()) {
+                $purchaseRequest->setAttachment($oldAttachment);
+            }
+
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_purchase_request_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute(
+                'app_purchase_request_index',
+                [],
+                Response::HTTP_SEE_OTHER
+            );
         }
 
         return $this->render('purchase_request/edit.html.twig', [
@@ -190,7 +199,7 @@ final class PurchaseRequestController extends AbstractController
 
         //Lier PR ↔ PO
         $purchaseRequest->setPurchaseOrder($purchaseOrder);
-
+        $purchaseOrder->setStatus('approved');
         //Sauvegarde
         $entityManager->persist($purchaseOrder);
         $entityManager->flush();

@@ -17,14 +17,12 @@ use App\Entity\Comment;
 #[ORM\Entity(repositoryClass: PurchaseRequestRepository::class)]
 class PurchaseRequest
 {
-    public const STATUS_DRAFT = 'draft';
-    public const STATUS_SUBMITTED = 'submitted';
+    public const STATUS_DRAFT    = 'draft';
+    public const STATUS_PENDING  = 'pending';
     public const STATUS_APPROVED = 'approved';
     public const STATUS_REJECTED = 'rejected';
-    public const STATUS_PENDING = 'pending';
-
-    #[ORM\Column(length: 50)]
-    private ?string $status = self::STATUS_DRAFT;
+    #[ORM\Column(length: 20)]
+    private ?string $status =  'draft';
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

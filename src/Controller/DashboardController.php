@@ -21,9 +21,16 @@ final class DashboardController extends AbstractController
         SupplierRepository $supplierRepo
     ): Response {
         $user = $this->getUser();
+        $statusSearch = 'pending';
         $stats = [
-            'totalRequests' => $this->isGranted('ROLE_ADMIN') ? $prRepo->count([]) : $prRepo->count(['requester' => $user]),
-            'pendingRequests' => $this->isGranted('ROLE_ADMIN') ? $prRepo->count(['status' => 'En attente']) : $prRepo->count(['requester' => $user, 'status' => 'En attente']),
+            'totalRequests' => $this->isGranted('ROLE_ADMIN')
+                ? $prRepo->count([])
+                : $prRepo->count(['requester' => $user]),
+
+            'pendingRequests' => $this->isGranted('ROLE_ADMIN')
+                ? $prRepo->count(['status' => $statusSearch])
+                : $prRepo->count(['requester' => $user, 'status' => $statusSearch]),
+
             'totalProducts' => $productRepo->count([]),
         ];
 

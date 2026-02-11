@@ -1,44 +1,64 @@
 {{ form_start(form) }}
-    <div class="row">
-        <div class="col-md-8">
-            <div class="form-group">
-                {{ form_row(form.reference, {
+<div class="row">
+	<div class="col-md-8">
+		<div class="form-group">
+			{{ form_row(form.reference, {
                     'label': 'Reference (Internal)',
                     'attr': {'class': 'form-control', 'placeholder': 'Ex: PR-2025-001'}
                 }) }}
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                {{ form_row(form.quantity, {
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="form-group">
+			{{ form_row(form.quantity, {
                     'label': 'Quantity',
                     'attr': {'class': 'form-control', 'min': 1}
                 }) }}
-            </div>
-        </div>
-    </div>
-
-    <div class="form-group">
-        {{ form_row(form.justification, {
+		</div>
+	</div>
+</div>
+<div class="form-group mt-3">
+	{{ form_row(form.justification, {
             'label': 'Justification',
             'attr': {'class': 'form-control', 'rows': 3, 'placeholder': 'Why do you need this?'}
         }) }}
-    </div>
+</div>
+<div class="form-group mt-3">
+	<label for="{{ form.attachment.vars.id }}">Attachment (PDF)</label>
+	<div class="input-group">
+		<div class="custom-file">
+			{{ form_widget(form.attachment, {'attr': {'class': 'custom-file-input'}}) }}
+			<label class="custom-file-label" data-browse="Browse">Choose PDF File</label>
+		</div>
+	</div>
+	{{ form_errors(form.attachment) }}
+</div>
 
-    <div class="form-group">
-        <label for="{{ form.attachment.vars.id }}">Attachment (PDF)</label>
-        <div class="input-group">
-            <div class="custom-file">
-                {{ form_widget(form.attachment, {'attr': {'class': 'custom-file-input'}}) }}
-                <label class="custom-file-label" data-browse="Browse">Choose PDF File</label>
-            </div>
-        </div>
-        {{ form_errors(form.attachment) }}
-    </div>
+<hr class="my-4">
 
-    <div class="mt-4 text-right">
-        <button class="btn btn-info px-4 shadow-sm">
-            <i class="fas fa-paper-plane mr-1"></i> Submit Request
-        </a>
-    </div>
+<div class="row">
+	<div class="col-md-6">
+		{{ form_row(form.status, {'attr': {'class': 'form-control'}}) }}
+	</div>
+	<div class="col-md-6">
+		{{ form_row(form.requester, {'attr': {'class': 'form-control'}}) }}
+	</div>
+	<div class="col-md-6">
+		{{ form_row(form.product, {'attr': {'class': 'form-control'}}) }}
+	</div>
+
+</div>
+<div class="form-group mt-3">
+	{{ form_row(form.createdAt, {
+            'label': 'Date de création',
+            'attr': {'class': 'form-control'}
+        }) }}
+</div>
+<div class="mt-4 text-right">
+	<button type="submit" class="btn btn-info btn-block shadow-sm">
+		<i class="fas fa-paper-plane mr-2"></i>
+		{{ button_label|default('Submit Request') }}
+	</button>
+</div>
+
 {{ form_end(form) }}
